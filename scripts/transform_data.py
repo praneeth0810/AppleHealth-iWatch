@@ -87,26 +87,56 @@ Drop sessions where end < start
 Compute sleep duration in minutes
 Aggregate daily sleep duration (per created_at)
 Add year, month, day
+Fix the overlapping sleep sessions to get clean data.
+- Sometimes, sleep data contains overlapping or continuous sessions.
+- Merging prevents the overestimation of sleep duration.
 """
 def transform_sleep_data(df):
     logging.info("Transforming Sleep Data")
-    df['start_date'] = pd.to_datetime(df['start_date'],errors='coerce')
-    df['end_date'] = pd.to_datetime(df['end_date'],errors='coerce')
-    df['created_at'] = pd.to_datetime(df['created_at'],errors='coerce')
+    
+    df['start_date'] = pd.to_datetime(df['start_date'], errors='coerce')
+    df['end_date'] = pd.to_datetime(df['end_date'], errors='coerce')
+    df['created_at'] = pd.to_datetime(df['created_at'], errors='coerce')
+    
     df = df.dropna(subset=['created_at', 'start_date', 'end_date'])
     df = df[df['end_date'] > df['start_date']]
+    
+    # Sort by start date for proper merging
+    df = df.sort_values(by=['created_at', 'start_date'])
 
-    df['duration_mins'] = (df['end_date'] - df['start_date']).dt.total_seconds() / 60
+    # Merge overlapping sleep sessions
+    merged_sessions = []
+    current_start, current_end = None, None
 
-    sleep_daily = (
-        df.groupby(df['created_at'].dt.date)
-        .agg(total_sleep_minutes=('duration_mins', 'sum'))
-        .reset_index()
-    )
+    # Simplified merging using zip
+    for start, end in zip(df['start_date'], df['end_date']):
+        if current_start is None:
+            current_start, current_end = start, end
+        elif start <= current_end:
+            # Extend the current session if overlapping
+            current_end = max(current_end, end)
+        else:
+            # Save the completed session and start a new one
+            merged_sessions.append((current_start, current_end))
+            current_start, current_end = start, end
+
+    # Add the last merged session
+    if current_start is not None:
+        merged_sessions.append((current_start, current_end))
+
+    # Convert merged sessions to a DataFrame
+    merged_df = pd.DataFrame(merged_sessions, columns=['start_date', 'end_date'])
+    merged_df['duration_mins'] = (merged_df['end_date'] - merged_df['start_date']).dt.total_seconds() / 60
+
+    # Aggregate daily sleep duration
+    merged_df['created_at'] = merged_df['start_date'].dt.date
+    sleep_daily = merged_df.groupby('created_at').agg(total_sleep_minutes=('duration_mins', 'sum')).reset_index()
     sleep_daily['created_at'] = pd.to_datetime(sleep_daily['created_at'])
     sleep_daily['year'] = sleep_daily['created_at'].dt.year
     sleep_daily['month'] = sleep_daily['created_at'].dt.month
     sleep_daily['day'] = sleep_daily['created_at'].dt.day
+
+    logging.info("Transformation complete")
     return sleep_daily
 
 """
