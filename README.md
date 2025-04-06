@@ -133,8 +133,8 @@ The **Streamlit Dashboard** provides a user-friendly interface to explore health
 - **Charts:** Line, bar, and pie charts for various metrics.
 - **Alerts:** Displays warnings for abnormal metrics.
 
-### Starting the Dashboard:
+### Access the Dashboard:
 ```bash
-streamlit run scripts/health_dashboard.py
+https://applehealth-iwatch-pranchav.streamlit.app/
 ```
 
