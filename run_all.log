@@ -1,0 +1,63 @@
+2025-04-05 21:53:01,731 - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2025-04-05 21:53:01,837 - INFO - Starting with ElementTree version...
+2025-04-05 21:53:02,128 - INFO - Reading the whole memory file from the streaming object might take some time
+2025-04-05 21:55:04,531 - INFO - Starting XML parsing using ElementTree...
+2025-04-05 21:55:04,531 - INFO - Writing to S3: processed/Heart_Data.csv
+2025-04-05 21:55:04,800 - INFO - processed/Heart_Data.csv - written 50000 rows...
+2025-04-05 21:55:05,073 - INFO - processed/Heart_Data.csv - written 100000 rows...
+2025-04-05 21:55:05,328 - INFO - processed/Heart_Data.csv - written 150000 rows...
+2025-04-05 21:55:05,614 - INFO - processed/Heart_Data.csv - written 200000 rows...
+2025-04-05 21:55:11,987 - INFO - Done writing 230491 rows to processed/Heart_Data.csv
+2025-04-05 21:55:11,988 - INFO - Writing to S3: processed/Sleep_Data.csv
+2025-04-05 21:55:18,889 - INFO - Done writing 25549 rows to processed/Sleep_Data.csv
+2025-04-05 21:55:18,891 - INFO - Writing to S3: processed/Step_Data.csv
+2025-04-05 21:55:20,390 - INFO - processed/Step_Data.csv - written 50000 rows...
+2025-04-05 21:55:25,770 - INFO - Done writing 76579 rows to processed/Step_Data.csv
+2025-04-05 21:55:25,770 - INFO - Writing to S3: processed/Resp_Data.csv
+2025-04-05 21:55:34,030 - INFO - Done writing 21010 rows to processed/Resp_Data.csv
+2025-04-05 21:55:34,030 - INFO - All CSVs written using ElementTree.
+2025-04-05 21:55:34,031 - INFO - Job complete in 152.19 seconds.
+2025-04-05 21:55:35,730 - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2025-04-05 21:55:35,844 - INFO - Starting Health Transformation ETL Job
+2025-04-05 21:55:35,844 - INFO - Read File: Heart_Data.csv
+2025-04-05 21:55:37,302 - INFO - Loaded230,491 rows from Heart_Data.csv
+2025-04-05 21:55:37,302 - INFO - Transforming Heart Data
+2025-04-05 21:55:38,381 - INFO - Writing 542 records to heart
+2025-04-05 21:55:38,654 - INFO - Upload completed for transformed_parquet/heart/heart.parquet
+2025-04-05 21:55:38,655 - INFO - Read File: Resp_Data.csv
+2025-04-05 21:55:38,888 - INFO - Loaded21,010 rows from Resp_Data.csv
+2025-04-05 21:55:38,888 - INFO - Transforming Respiratory Rate Data
+2025-04-05 21:55:39,030 - INFO - Writing 504 records to resp
+2025-04-05 21:55:39,097 - INFO - Upload completed for transformed_parquet/resp/resp.parquet
+2025-04-05 21:55:39,097 - INFO - Read File: Sleep_Data.csv
+2025-04-05 21:55:39,756 - INFO - Loaded25,549 rows from Sleep_Data.csv
+2025-04-05 21:55:39,756 - INFO - Transforming Sleep Data
+2025-04-05 21:55:40,005 - INFO - Writing 957 records to sleep
+2025-04-05 21:55:40,076 - INFO - Upload completed for transformed_parquet/sleep/sleep.parquet
+2025-04-05 21:55:40,076 - INFO - Read File: Step_Data.csv
+2025-04-05 21:55:40,781 - INFO - Loaded76,579 rows from Step_Data.csv
+2025-04-05 21:55:40,781 - INFO - Transforming Step Count data
+2025-04-05 21:55:41,135 - INFO - Writing 846 records to step
+2025-04-05 21:55:41,199 - INFO - Upload completed for transformed_parquet/step/step.parquet
+2025-04-05 21:55:41,200 - INFO - Health Transformation ETL Job completed
+Time taken 5.36 seconds
+
+  You can now view your Streamlit app in your browser.
+
+  Local URL: http://localhost:8501
+  Network URL: http://192.168.0.102:8501
+
+/Users/praneethchavva/Desktop/Projects/Apple Health Data/health_dashboard.py:96: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df["zone"] = df["avg_heart_rate"].apply(zone)
+/Users/praneethchavva/Desktop/Projects/Apple Health Data/health_dashboard.py:124: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+
