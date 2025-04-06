@@ -2,7 +2,7 @@
 
 ## 📑 Description
 
-![Alt text](iwatch_health_architecture.png)
+![Architecture](iwatchHealthAnalytics.png)
 
 The **Apple Health Data Pipeline** processes health data exported from Apple Watch via iCloud, transforms the data using AWS services, and visualizes it through a **Streamlit dashboard**. This project leverages AWS EC2 for data processing, S3 for data storage, AWS Glue for data cataloging, and Amazon Athena for querying transformed data.
 
