@@ -7,13 +7,25 @@ import time
 import boto3
 from io import BytesIO
 
+# Accessing secrets
+access_key = st.secrets["default"]["AWS_ACCESS_KEY_ID"]
+secret_key = st.secrets["default"]["AWS_SECRET_ACCESS_KEY"]
+region = st.secrets["default"]["AWS_DEFAULT_REGION"]
+
 # Configures page title and layout and the page the title.
 st.set_page_config(page_title="📊 Monthly Health Trends", layout="wide")
 
 #Sets the main title at the top of dashboard
 st.title("📊 Your Health Trends Over Time")
 
-s3 = boto3.client('s3')
+# Creating an S3 client
+s3 = boto3.client(
+    "s3",
+    aws_access_key_id=access_key,
+    aws_secret_access_key=secret_key,
+    region_name=region
+)
+
 @st.cache_data
 def load_data():
     # S3 bucket details
