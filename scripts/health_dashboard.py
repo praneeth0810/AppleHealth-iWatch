@@ -8,9 +8,9 @@ import boto3
 from io import BytesIO
 
 # Accessing secrets
-access_key = st.secrets["default"]["AWS_ACCESS_KEY_ID"]
-secret_key = st.secrets["default"]["AWS_SECRET_ACCESS_KEY"]
-region = st.secrets["default"]["AWS_DEFAULT_REGION"]
+access_key = st.secrets["AWS_ACCESS_KEY_ID"]
+secret_key = st.secrets["AWS_SECRET_ACCESS_KEY"]
+region = st.secrets["AWS_DEFAULT_REGION"]
 
 # Configures page title and layout and the page the title.
 st.set_page_config(page_title="📊 Monthly Health Trends", layout="wide")
