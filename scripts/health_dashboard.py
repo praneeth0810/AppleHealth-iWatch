@@ -4,6 +4,7 @@ import pandas as pd
 import altair as alt
 import plotly.express as px
 import time
+import requests
 from io import BytesIO
 
 
