@@ -4,13 +4,9 @@ import pandas as pd
 import altair as alt
 import plotly.express as px
 import time
-import boto3
 from io import BytesIO
 
-# Accessing secrets
-access_key = st.secrets["AWS_ACCESS_KEY_ID"]
-secret_key = st.secrets["AWS_SECRET_ACCESS_KEY"]
-region = st.secrets["AWS_DEFAULT_REGION"]
+
 
 # Configures page title and layout and the page the title.
 st.set_page_config(page_title="📊 Monthly Health Trends", layout="wide")
@@ -18,47 +14,34 @@ st.set_page_config(page_title="📊 Monthly Health Trends", layout="wide")
 #Sets the main title at the top of dashboard
 st.title("📊 Your Health Trends Over Time")
 
-# Creating an S3 client
-s3 = boto3.client(
-    "s3",
-    aws_access_key_id=access_key,
-    aws_secret_access_key=secret_key,
-    region_name=region
-)
-
 @st.cache_data
 def load_data():
-    # S3 bucket details
-    bucket_name = "iwatch-healthdatatransform-parquet"
-    folder_path = "transformed_parquet/" 
 
-    # S3 client
-    s3 = boto3.client("s3")
+    base_url = "https://raw.githubusercontent.com/praneeth0810/AppleHealth-iWatch/main/transformed%20parq"
 
-    # Function to read parquet from S3
-    def read_parquet_from_s3(bucket, key):
-        response = s3.get_object(Bucket=bucket, Key=key)
-        return pd.read_parquet(BytesIO(response['Body'].read()))
+    files = {
+        "heart": f"{base_url}/heart.parquet",
+        "sleep": f"{base_url}/sleep.parquet",
+        "resp": f"{base_url}/resp.parquet",
+        "steps": f"{base_url}/step.parquet",
+    }
 
-    # File paths in the S3 bucket
-    heart_path = f"{folder_path}heart/heart.parquet"
-    sleep_path = f"{folder_path}sleep/sleep.parquet"
-    resp_path = f"{folder_path}resp/resp.parquet"
-    steps_path = f"{folder_path}step/step.parquet"
+    def read_parquet_from_github(url):
+        response = requests.get(url)
+        response.raise_for_status()
+        return pd.read_parquet(BytesIO(response.content))
 
-    # Reading parquet files from S3
-    heart = read_parquet_from_s3(bucket_name, heart_path)
-    sleep = read_parquet_from_s3(bucket_name, sleep_path)
-    resp = read_parquet_from_s3(bucket_name, resp_path)
-    steps = read_parquet_from_s3(bucket_name, steps_path)
+    heart = read_parquet_from_github(files["heart"])
+    sleep = read_parquet_from_github(files["sleep"])
+    resp = read_parquet_from_github(files["resp"])
+    steps = read_parquet_from_github(files["steps"])
 
-    # Data preprocessing
     for df in [heart, sleep, resp, steps]:
         df["created_at"] = pd.to_datetime(df["created_at"])
         df["year"] = df["created_at"].dt.year
         df["month"] = df["created_at"].dt.month
         df["weekday"] = df["created_at"].dt.day_name()
-        
+
     return heart, sleep, resp, steps
 
 heart_df, sleep_df, resp_df, steps_df = load_data()
